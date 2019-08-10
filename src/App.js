@@ -14,31 +14,36 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      retrieving_articles: false,
       articles: [],
       search_query: ""
     };
   }
 
   componentDidMount() {
-    document.addEventListener("scroll", this.handleScroll);
+    document.addEventListener("scroll", (evt) => this.handleScroll(evt, this));
   }
 
   componentWillMount() {
     this.getArticles();
   }
 
-  handleScroll(event) {
-    if (document.documentElement.scrollHeight == document.documentElement.scrollTop + window.innerHeight) {
-      // Hit the bottom give me more articles!
+  handleScroll(event, self) {
+    if (document.documentElement.scrollHeight >= (document.documentElement.scrollTop + window.innerHeight) / 3) {
+      // Hit the bottom, give me more articles!
+      self.getArticles()
     }
   }
 
   getArticles() {
-    let articles = [];
-    const url = this.state.search_query === "" ? "http://localhost:8000/articles" : "http://localhost:8000/articles?query=" + this.state.search_query
+    if (this.state.retrieving_articles) {
+      return;
+    }
+
+    this.setState({ retrieving_articles: true })
+    const url = this.state.search_query === "" ? "http://localhost:8000/articles?offset=" + this.state.articles.length : "http://localhost:8000/articles?query=" + this.state.search_query + "&offset=0"
     fetch(url).then(res => res.json()).then(json => {
-      console.log(json);
-      this.setState({ articles: json });
+      this.setState({ retrieving_articles: false, articles: this.state.articles.concat(json) });
     }).catch(error => console.log(error));
   }
 
