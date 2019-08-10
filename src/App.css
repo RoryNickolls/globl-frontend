@@ -8,9 +8,8 @@ html, body {
 }
 
 .app-header {
-  width: inherit;
   background-color: #282c34;
-  padding: 5vh;
+  width:inherit;
   text-align: center;
 }
 
@@ -20,7 +19,7 @@ html, body {
 }
 
 .flex-container {
-  width: inherit;
+  width:100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,7 +29,14 @@ html, body {
 }
 
 .article-banner {
-  text-align: center;
+  text-align: left;
+  display:flex;
+  padding: 2vh;
+  align-items: center;
+}
+
+.article-banner div {
+  padding-left: 1vh;
 }
 
 .article-banner a {
@@ -43,7 +49,7 @@ html, body {
 }
 
 .article-container {
-  width: inherit;
+  width: 100%;
   background-color: #4a4e56;
   color: lightgrey;
 }

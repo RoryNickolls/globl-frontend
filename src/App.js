@@ -19,8 +19,18 @@ class App extends React.Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener("scroll", this.handleScroll);
+  }
+
   componentWillMount() {
     this.getArticles();
+  }
+
+  handleScroll(event) {
+    if (document.documentElement.scrollHeight == document.documentElement.scrollTop + window.innerHeight) {
+      // Hit the bottom give me more articles!
+    }
   }
 
   getArticles() {
@@ -38,6 +48,7 @@ class App extends React.Component {
   }
 
   render() {
+    let num = 0;
     return (
       <div className="App">
         <div className="flex-container">
@@ -51,12 +62,12 @@ class App extends React.Component {
             <ol className="article-list">
               {this.state.articles.map(
                 article =>
-                  <Article key={article.title} title={article.title} description={article.description} url={article.url} publish_date={article.publish_date} />
+                  <Article key={num++} title={article.title} description={article.description} url={article.url} img_url={article.img_url} publish_date={article.publish_date} />
               )}
             </ol>
           </div>
         </div>
-      </div>
+      </div >
     );
   }
 }
