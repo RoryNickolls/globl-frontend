@@ -29,7 +29,7 @@ class App extends React.Component {
   }
 
   handleScroll(event, self) {
-    if (document.documentElement.scrollHeight >= (document.documentElement.scrollTop + window.innerHeight) / 3) {
+    if (document.documentElement.scrollHeight <= (document.documentElement.scrollTop + (window.innerHeight * 2))) {
       // Hit the bottom, give me more articles!
       self.getArticles()
     }
