@@ -9,7 +9,7 @@ class Article extends React.Component {
             <div>
                 <img width={200} height={"auto"} src={this.props.img_url} />
             </div>
-            <div onClick={() => window.location = this.props.url}>
+            <div onClick={() => window.open(this.props.url)}>
                 <h1>
                     {this.props.title}
                 </h1>
