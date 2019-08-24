@@ -1,12 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Article from './Article';
+import Article from './components/Article/Article';
 
-class SearchBar extends React.Component {
-  render() {
-    return <input className="search-bar" type="text" onKeyUp={evt => this.props.onInput(evt.target.value)}></input>
-  }
+
+const SearchBar = ({ onInput }) => {
+  return <input className="search-bar" type="text" onKeyUp={evt => onInput(evt.target.value)}></input>
 }
 
 class App extends React.Component {
@@ -22,9 +20,6 @@ class App extends React.Component {
 
   componentDidMount() {
     document.addEventListener("scroll", (evt) => this.handleScroll(evt, this));
-  }
-
-  componentWillMount() {
     this.getArticles();
   }
 
@@ -53,7 +48,6 @@ class App extends React.Component {
   }
 
   render() {
-    let num = 0;
     return (
       <div className="App">
         <div className="flex-container">
@@ -63,13 +57,11 @@ class App extends React.Component {
               <SearchBar onInput={val => this.updateSearchQuery(val)} />
             </div>
           </div>
-          <div className="article-container">
-            <ol className="article-list">
-              {this.state.articles.map(
-                article =>
-                  <Article key={num++} title={article.title} description={article.description} url={article.url} img_url={article.img_url} publish_date={article.publish_date} />
-              )}
-            </ol>
+          <div className="article-list">
+            {this.state.articles.map(
+              (articleId, index) =>
+                <Article key={index} id={articleId} />
+            )}
           </div>
         </div>
       </div >

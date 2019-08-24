@@ -18,6 +18,11 @@ html, body {
   color: white;
 }
 
+.article-list {
+  padding: 0;
+  width: 100%;
+}
+
 .flex-container {
   width:100%;
   display: flex;
@@ -28,31 +33,7 @@ html, body {
   padding: 0;
 }
 
-.article-banner {
-  text-align: left;
-  display:flex;
-  padding: 2vh;
-  align-items: center;
-}
 
-.article-banner div {
-  padding-left: 1vh;
-}
-
-.article-banner a {
-  color: white;
-}
-
-.article-list {
-  padding: 0;
-  list-style-type: none;
-}
-
-.article-container {
-  width: 100%;
-  background-color: #4a4e56;
-  color: lightgrey;
-}
 
 .search-bar {
   color: white;
