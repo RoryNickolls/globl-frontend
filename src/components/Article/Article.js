@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core';
+import { Button, Typography, Paper } from '@material-ui/core';
 import './Article.css';
 
-const Article = ({ id }) => {
+const useStyles = makeStyles(theme => ({
+    button: {
+        color: "lightgray",
+    },
+    contentText: {
+        align: "left"
+    }
+}));
 
+const Article = ({ id }) => {
+    const classes = useStyles();
     const [data, setData] = useState({});
 
     useEffect(() => {
@@ -33,30 +44,34 @@ const Article = ({ id }) => {
         });
     }
 
+    if (Object.keys(data) <= 0) {
+        return <Typography variant="h1">Loading...</Typography>
+    }
+
     let hoursDiff = (Date.now() - Date.parse(data.publish_date)) / 1000 / 3600;
     let daysDiff = hoursDiff / 24;
 
-    return <li className="banner">
-        <div className="banner img">
+    return <Paper className="banner">
+        <div className="banner-img">
             <img alt={data.title} width={"200"} height={"auto"} src={data.img_url} />
         </div>
-        <div className="banner content" onClick={() => window.open(data.url)}>
-            <h1>
+        <div className="banner-content" onClick={() => window.open(data.url)}>
+            <Typography className={classes.contentText} variant="h4">
                 {data.title}
-            </h1>
-            <p>
+            </Typography>
+            <Typography variant="body2">
                 {data.description}
-            </p>
-            <p>
+            </Typography>
+            <Typography variant="overline">
                 Published {daysDiff >= 1 ? parseInt(daysDiff) + " days," : ""} {parseInt(hoursDiff % 24)} hours ago
-                </p>
+            </Typography>
         </div>
-        <div className="banner voting">
-            <p onClick={onClickReliable}>Reliable {data.reliable_votes}</p>
-            <p onClick={onClickControversial}>Controversial {data.controversial_votes}</p>
-            <p onClick={onClickInteresting}>Interesting {data.interesting_votes}</p>
+        <div className="banner-voting">
+            <Typography>Reliable <Button className={classes.button} onClick={onClickReliable}>{data.reliable_votes}</Button></Typography>
+            <Typography>Controversial <Button className={classes.button} onClick={onClickControversial}>{data.controversial_votes}</Button></Typography>
+            <Typography>Interesting <Button className={classes.button} onClick={onClickInteresting}>{data.interesting_votes}</Button></Typography>
         </div>
-    </li>
+    </Paper>
 }
 
 export default Article;

@@ -1,72 +1,69 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Article from './components/Article/Article';
+import { Typography, AppBar } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios'
 
 
 const SearchBar = ({ onInput }) => {
   return <input className="search-bar" type="text" onKeyUp={evt => onInput(evt.target.value)}></input>
 }
 
-class App extends React.Component {
+const useStyles = makeStyles(theme => ({
+  appBar: {
+    backgroundColor: "red",
+  },
+}));
 
-  constructor() {
-    super();
-    this.state = {
-      retrieving_articles: false,
-      articles: [],
-      search_query: ""
-    };
-  }
+const App = () => {
 
-  componentDidMount() {
-    document.addEventListener("scroll", (evt) => this.handleScroll(evt, this));
-    this.getArticles();
-  }
+  const [articles, setArticles] = useState([]);
+  const [loadingArticles, setLoadingArticles] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  handleScroll(event, self) {
-    if (document.documentElement.scrollHeight <= (document.documentElement.scrollTop + (window.innerHeight * 2))) {
-      // Hit the bottom, give me more articles!
-      self.getArticles()
+  const classes = useStyles();
+  const moreArticles = async () => {
+    const url = searchQuery === "" ? "http://localhost:8000/articles?offset=" + articles.length : "http://localhost:8000/articles?query=" + searchQuery + "&offset=0"
+    const res = await axios(url);
+    setArticles(articles.concat(res.data));
+    setLoadingArticles(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('scroll', evt => {
+      if (document.documentElement.scrollHeight <= (document.documentElement.scrollTop + (window.innerHeight * 2))) {
+        // Hit the bottom, give me more articles!
+        setLoadingArticles(true);
+      }
+    });
+
+    moreArticles();
+  }, []);
+
+  useEffect(() => {
+    if (loadingArticles) {
+      moreArticles();
     }
-  }
+  }, [loadingArticles]);
 
-  getArticles() {
-    if (this.state.retrieving_articles) {
-      return;
-    }
-
-    this.setState({ retrieving_articles: true })
-    const url = this.state.search_query === "" ? "http://localhost:8000/articles?offset=" + this.state.articles.length : "http://localhost:8000/articles?query=" + this.state.search_query + "&offset=0"
-    fetch(url).then(res => res.json()).then(json => {
-      this.setState({ retrieving_articles: false, articles: this.state.articles.concat(json) });
-    }).catch(error => console.log(error));
-  }
-
-  updateSearchQuery(new_query) {
-    this.setState({ articles: [] });
-    this.setState({ search_query: new_query }, () => this.getArticles());
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <div className="flex-container">
-          <div className="app-header">
-            <b className="app-header-title">GLOBL</b>
-            <div>
-              <SearchBar onInput={val => this.updateSearchQuery(val)} />
-            </div>
-          </div>
-          <div className="article-list">
-            {this.state.articles.map(
-              (articleId, index) =>
-                <Article key={index} id={articleId} />
-            )}
-          </div>
-        </div>
-      </div >
-    );
-  }
+  return (
+    <div className="App">
+      <div className="flex-container">
+        <AppBar className={classes.appBar} position="static">
+          <Typography variant="h3" className="app-header-title">GLOBL</Typography>
+          <SearchBar onInput={val => this.updateSearchQuery(val)} />
+        </AppBar>
+        <ol className="article-list">
+          {articles.map(
+            (articleId, index) =>
+              <li key={index}><Article id={articleId} /></li>
+          )}
+        </ol>
+      </div>
+    </div >
+  );
 }
+
 
 export default App;
