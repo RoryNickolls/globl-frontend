@@ -12,7 +12,8 @@ const SearchBar = ({ onInput }) => {
 
 const useStyles = makeStyles(theme => ({
   appBar: {
-    backgroundColor: "red",
+    backgroundColor: "lightgrey",
+    marginBottom: "2vh",
   },
 }));
 
@@ -51,9 +52,9 @@ const App = () => {
     <div className="App">
       <div className="flex-container">
         <AppBar className={classes.appBar} position="static">
-          <Typography variant="h3" className="app-header-title">GLOBL</Typography>
-          <SearchBar onInput={val => this.updateSearchQuery(val)} />
+          <Typography variant="h3" className="app-header-title">globl</Typography>
         </AppBar>
+        <SearchBar onInput={val => this.updateSearchQuery(val)} />
         <ol className="article-list">
           {articles.map(
             (articleId, index) =>

@@ -13,7 +13,7 @@ html, body {
 }
 
 .app-header-title {
-  color: white;
+  color: black;
   text-align: center;
 }
 
@@ -25,14 +25,12 @@ html, body {
 ol li {
   margin-bottom:1vh;
 }
-
 .flex-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0;
-  padding: 0;
+  margin: 2vh;
 }
 
 
