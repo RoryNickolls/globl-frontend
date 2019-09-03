@@ -18,10 +18,6 @@
     align-items: left;
 }
 
-.banner-content Typography {
-  text-align:left;
-}
-
 .banner-voting {
     text-align: right;
     display: flex;

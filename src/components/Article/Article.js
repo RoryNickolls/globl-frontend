@@ -5,7 +5,7 @@ import './Article.css';
 
 const useStyles = makeStyles(theme => ({
     button: {
-        color: "lightgray",
+        color: "black",
     },
     contentText: {
         align: "left"

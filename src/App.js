@@ -1,21 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Article from './components/Article/Article';
-import { Typography, AppBar } from '@material-ui/core';
+import { Typography, AppBar, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios'
 
 
-const SearchBar = ({ onInput }) => {
-  return <input className="search-bar" type="text" onKeyUp={evt => onInput(evt.target.value)}></input>
-}
-
 const useStyles = makeStyles(theme => ({
   appBar: {
-    backgroundColor: "lightgrey",
+    backgroundColor: "skyblue",
     marginBottom: "2vh",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  appBarTitle: {
+    alignSelf: "center",
+    paddingLeft: "2vh",
+  },
+  page: {
+    backgroundColor: "gray",
+  },
+  searchBar: {
+    width: "50%",
   },
 }));
+
+const SearchBar = ({ onInput }) => {
+  const classes = useStyles();
+  return <TextField label="Search" margin="dense" className={classes.searchBar} onKeyUp={evt => onInput(evt.target.value)} />
+}
 
 const App = () => {
 
@@ -52,9 +66,10 @@ const App = () => {
     <div className="App">
       <div className="flex-container">
         <AppBar className={classes.appBar} position="static">
-          <Typography variant="h3" className="app-header-title">globl</Typography>
+          <Typography variant="h5" className={classes.appBarTitle}>globl</Typography>
+          <SearchBar onInput={val => this.updateSearchQuery(val)} />
+          <div></div>
         </AppBar>
-        <SearchBar onInput={val => this.updateSearchQuery(val)} />
         <ol className="article-list">
           {articles.map(
             (articleId, index) =>
