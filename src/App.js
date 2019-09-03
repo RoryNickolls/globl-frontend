@@ -34,14 +34,22 @@ const SearchBar = ({ onInput }) => {
 const App = () => {
 
   const [articles, setArticles] = useState([]);
-  const [loadingArticles, setLoadingArticles] = useState(false);
+  const [loadingArticles, setLoadingArticles] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
   const classes = useStyles();
-  const moreArticles = async () => {
-    const url = searchQuery === "" ? "http://localhost:8000/articles?offset=" + articles.length : "http://localhost:8000/articles?query=" + searchQuery + "&offset=0"
+  const moreArticles = async (override) => {
+    const url = searchQuery === "" ? "http://localhost:8000/articles?offset=" + articles.length : "http://localhost:8000/articles?query=" + searchQuery + "&offset=" + articles.length
     const res = await axios(url);
-    setArticles(articles.concat(res.data));
+
+    let newArticles = res.data;
+
+    if (override) {
+      setArticles(newArticles);
+    } else {
+      setArticles(articles.concat(newArticles));
+    }
+
     setLoadingArticles(false);
   };
 
@@ -52,13 +60,15 @@ const App = () => {
         setLoadingArticles(true);
       }
     });
-
-    moreArticles();
   }, []);
 
   useEffect(() => {
+    moreArticles(true);
+  }, [searchQuery]);
+
+  useEffect(() => {
     if (loadingArticles) {
-      moreArticles();
+      moreArticles(false);
     }
   }, [loadingArticles]);
 
@@ -67,7 +77,7 @@ const App = () => {
       <div className="flex-container">
         <AppBar className={classes.appBar} position="static">
           <Typography variant="h5" className={classes.appBarTitle}>globl</Typography>
-          <SearchBar onInput={val => this.updateSearchQuery(val)} />
+          <SearchBar onInput={val => setSearchQuery(val)} />
           <div></div>
         </AppBar>
         <ol className="article-list">
